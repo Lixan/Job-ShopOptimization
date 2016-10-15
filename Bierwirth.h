@@ -2,6 +2,7 @@
 #define BIERWIRTH_H
 
 #include <vector>
+#include <list>
 #include "Data.h"
 
 class Bierwirth
@@ -18,9 +19,10 @@ public:
     Bierwirth(int n, int m);
     void shuffle();
     void initializeVectors();
-    int evaluate(Data &d);
+    int evaluate(Data &d, Operation &derniereOperation);
     void cheminCritique();
     Operation* trouverMachinePrec(std::vector<Operation*> &operations, int operationsSize, int numeroMachine);
+    void cheminCritique(std::list<Operation*> &listeCheminCritique, Operation *derniereOperation);
 };
 
 #endif // BIERWIRTH_H

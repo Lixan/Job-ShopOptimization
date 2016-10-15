@@ -10,6 +10,7 @@ public:
 public:
     Operation();
     Operation(int numeroMachine, int numeroJob, int duree);
+    void affiche() const;
 
     int getNumeroMachine() const;
     int getNumeroJob() const;

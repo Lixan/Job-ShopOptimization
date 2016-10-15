@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>    // std::random_shuffle
+#include <list>
 #include "Data.h"
 #include "Bierwirth.h"
 #include "Operation.h"
@@ -42,13 +43,12 @@ void Bierwirth::initializeVectors()
     }
 }
 
-int Bierwirth::evaluate(Data &d)
+int Bierwirth::evaluate(Data &d, Operation &derniereOperation)
 {
     std::vector<int> occurences;
     std::vector<Operation*> operations; //vecteurs contenant toutes les opérations traitées dans l'ordre
 
-    Operation   derniereOperation = d.operations[0][0],
-                *pere = 0;
+    Operation *pere = 0;
     int i,
         bierwirthSize = n*m,
         idJob, // = ligne = id du job courant traité
@@ -78,6 +78,8 @@ int Bierwirth::evaluate(Data &d)
 
     // =======================================================
     //début du traitement du vecteur de bierwirth
+    derniereOperation = d.operations[0][0];
+
     for(i=0; i<bierwirthSize; ++i)
     {
         idJob = bierwirth_vector[i];
@@ -114,6 +116,11 @@ int Bierwirth::evaluate(Data &d)
         dateFinJob[idJob] = dateFinMax;
         dateFinOperationMachine[idMachine] = dateFinMax;
 
+        if(dateFinMax > dateFinAuPlusTot)
+        {
+            derniereOperation = d.operations[idJob][occurences[idJob]];
+            dateFinAuPlusTot = dateFinMax;
+        }
         //std::cout << "Date fin (" << idJob << ";" << occurences[idJob] << ") = " << dateFinMax << std::endl;
     }
 
@@ -128,8 +135,6 @@ int Bierwirth::evaluate(Data &d)
     {
         std::cout << "Operation machine " << i << " - date fin = " << dateFinOperationMachine[i] << std::endl;
     }
-
-    dateFinAuPlusTot = std::max(*std::max_element(dateFinJob.begin(), dateFinJob.end()), *std::max_element(dateFinOperationMachine.begin(), dateFinOperationMachine.end()));
 
     return dateFinAuPlusTot;
 }
@@ -147,20 +152,19 @@ Operation* Bierwirth::trouverMachinePrec(std::vector<Operation*> &operations, in
     return prec;
 }
 
-void Bierwirth::cheminCritique()
+void Bierwirth::cheminCritique(std::list<Operation*> &listeCheminCritique, Operation *derniereOperation)
 {
-
-    //tq lastOp != -1 faire
-    //  getPere de lastOp
-    //  lastOp = pere
-    //fait
-    //sauvegarde dans un vecteur
-
-
-    //fonction rechercheLocale : on prend ce vecteur, dedans dès qu'une ligne change entre deux valeurs proches = morceaux interessants.
-
-    //copie de data courant
-    //on travaille sur la copie, on cherche dans notre liste de morceaux interessant a permuter les id, on evalue bierwirth : si meilleur il devient le data de base
-    //sinon on garde le data qu'on avait avant
-    //on va sur le morceaux suivant.
+    while(derniereOperation != 0)
+    {
+        listeCheminCritique.push_front(derniereOperation);
+        derniereOperation = derniereOperation->getPere();
+    }
 }
+
+
+//fonction rechercheLocale : on prend ce vecteur, dedans dès qu'une ligne change entre deux valeurs proches = morceaux interessants.
+
+//copie de data courant
+//on travaille sur la copie, on cherche dans notre liste de morceaux interessant a permuter les id, on evalue bierwirth : si meilleur il devient le data de base
+//sinon on garde le data qu'on avait avant
+//on va sur le morceaux suivant.
