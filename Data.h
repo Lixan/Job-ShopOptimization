@@ -9,7 +9,7 @@ class Data
 {
     int n,  //nombre de jobs
         m;  //nombre de machines
-    std::vector<std::vector<Operation>> operations;
+    std::vector<std::vector<Operation> > operations;
 
 public:
     Data();

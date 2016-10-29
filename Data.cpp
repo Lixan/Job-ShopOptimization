@@ -5,12 +5,19 @@
 #include "Data.h"
 #include <string>
 
+using namespace std;
+
 Data::Data() { }
 
-void Data::lireInstance(std::string filename)
+/**
+ * On lit un fichier de données et on y récupère ses opérations
+ * @brief Data::lireInstance
+ * @param filename
+ */
+void Data::lireInstance(string filename)
 {
-    std::ifstream fichier(filename.c_str());
-    std::string str;
+    ifstream fichier(filename.c_str());
+    string str;
 
     if(!fichier.fail())
     {
@@ -32,33 +39,41 @@ void Data::lireInstance(std::string filename)
     }
 }
 
+/**
+ * Affichage de toutes les opérations
+ * @brief Data::affiche
+ */
 void Data::affiche()
 {
     for(int i=0; i<operations.size(); ++i)
     {
-        std::cout << "Job " << operations[i][0].numeroJob << " : ";
+        cout << "Job " << operations[i][0].numeroJob << " : ";
         for(int j=0; j<operations[i].size(); ++j)
         {
-            std::cout << "(" << operations[i][j].numeroMachine << ";" << operations[i][j].duree << ") ";
+            cout << "(" << operations[i][j].numeroMachine << ";" << operations[i][j].duree << ") ";
         }
-        std::cout << std::endl;
+        cout << endl;
     }
 }
 
+/**
+ * Affichage des pères des opérations
+ * @brief Data::affichePeres
+ */
 void Data::affichePeres()
 {
     for(int i=0; i<operations.size(); ++i)
     {
         for(int j=0; j<operations[i].size(); ++j)
         {
-            std::cout << "Job " << i << "(" << operations[i][j].numeroMachine << ";" << operations[i][j].duree << ") ";
+            cout << "Job " << i << "(" << operations[i][j].numeroMachine << ";" << operations[i][j].duree << ") ";
             if(operations[i][j].pere != 0)
             {
-                std::cout << " -----> Pere = (" << operations[i][j].pere->numeroMachine << ";" << operations[i][j].pere->duree << ") " << std::endl;
+                cout << " -----> Pere = (" << operations[i][j].pere->numeroMachine << ";" << operations[i][j].pere->duree << ") " << endl;
             }
             else
             {
-                std::cout << "-----> Pere NULL" << std::endl;
+                cout << "-----> Pere NULL" << endl;
             }
         }
     }

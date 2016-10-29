@@ -1,12 +1,18 @@
 #include "Operation.h"
 #include <iostream>
 
+using namespace std;
+
 Operation::Operation() : numeroMachine(0), numeroJob(0), duree(0), pere(0) {}
 Operation::Operation(int numeroMachine, int numeroJob, int duree) : numeroMachine(numeroMachine), numeroJob(numeroJob), duree(duree), pere(0) {}
 
+/**
+ * Affichage de l'opération
+ * @brief Operation::affiche
+ */
 void Operation::affiche() const
 {
-    std::cout << "Operation : numero job = " << numeroJob << "| numero machine = " << numeroMachine << " | duree = " << duree << std::endl;
+    cout << "Operation : numero job = " << numeroJob << "| numero machine = " << numeroMachine << " | duree = " << duree << endl;
 }
 
 // ACCESSEURS ==============================================================================================================

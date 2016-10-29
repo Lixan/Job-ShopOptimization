@@ -10,19 +10,24 @@ class Bierwirth
     int n, //nb jobs
         m; //nb machines
     std::vector<int> bierwirth_vector;
-    std::vector<int> dateFinJob; //On a pour chaque job sa dernière date d'utilisation par une machine
-    std::vector<int> dateFinOperationMachine; //On a pour chaque machine sa dernière date d'utilisation pour un job
+    std::list<Operation*> listeCheminCritique;
 
-    Operation lastOp;
+    Operation *lastOp;
 
 public:
     Bierwirth(int n, int m);
     void shuffle();
-    void initializeVectors();
-    int evaluate(Data &d, Operation &derniereOperation);
+
+    int evaluate(Data &d);
     void cheminCritique();
-    Operation* trouverMachinePrec(std::vector<Operation*> &operations, int operationsSize, int numeroMachine);
-    void cheminCritique(std::list<Operation*> &listeCheminCritique, Operation *derniereOperation);
+    int rechercheLocale(Data &d);
+    int getMeilleureDate(Data &d1, int nbEssais);
+
+    void rechercheMorceauxInteressants(std::list<std::pair<Operation*, Operation*> > &pairs);
+    int getPositionOperation(const Data &d, Operation *op) const;
+
+    void afficherCheminCritique() const;
+    void afficherVecteurBierwirth() const;
 };
 
 #endif // BIERWIRTH_H
