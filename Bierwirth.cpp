@@ -191,9 +191,8 @@ int Bierwirth::rechercheLocale(Data &d)
     list<pair<Operation*, Operation*> >::iterator it;
 
     Bierwirth copie(n,m);
-    Data dataCopie(d);
 
-    dateFinPlusTot = evaluate(dataCopie);
+    dateFinPlusTot = evaluate(d);
 
     while(!stopAlgo)
     {
@@ -207,16 +206,15 @@ int Bierwirth::rechercheLocale(Data &d)
         while(it != pairs.end() && !stopPaires)
         {
             copie = *this;
-            position1 = getPositionOperation(dataCopie,it->first);
-            position2 = getPositionOperation(dataCopie,it->second);
+            position1 = getPositionOperation(d,it->first);
+            position2 = getPositionOperation(d,it->second);
             iter_swap(copie.bierwirth_vector.begin() + position1, copie.bierwirth_vector.begin() + position2);
 
-            dateFinPlusTotCopie = copie.evaluate(dataCopie);
+            dateFinPlusTotCopie = copie.evaluate(d);
 
             if(dateFinPlusTot > dateFinPlusTotCopie)
             {
                 *this = copie;
-                d = dataCopie;
                 stopPaires = true;
                 stopAlgo = false;
                 dateFinPlusTot = dateFinPlusTotCopie;
@@ -224,6 +222,9 @@ int Bierwirth::rechercheLocale(Data &d)
             ++it;
         }
     }
+
+    evaluate(d);    // on réévalue le vecteur "d" afin de remttre les bons pointeurs sur les pères des opérations
+    cheminCritique();
 
     //cout << "===> FIN : " << dateFinPlusTot << endl;
     return dateFinPlusTot;
@@ -237,31 +238,29 @@ int Bierwirth::rechercheLocale(Data &d)
  * @param nbEssais : nombre de recherches locales effectuées
  * @return : meilleure date de fin trouvée
  */
-int Bierwirth::getMeilleureDate(Data &d1, int nbEssais)
+int Bierwirth::getMeilleureDate(Data &d, int nbEssais)
 {
-    int date1, date2;
+    int dateFin,
+        dateFinCopie;
+    Bierwirth copie(d.getN(), d.getM());
 
-    Data d2 = d1;
-
-    Bierwirth b1(d1.getN(), d1.getM());
-    date1 = b1.rechercheLocale(d1);
+    dateFin = rechercheLocale(d);
 
     for(int i=0;i<nbEssais; ++i)
     {
-        Bierwirth b2(d2.getN(), d2.getM());
-        b2.shuffle();
 
-        date2 = b2.rechercheLocale(d2);
+        copie.shuffle();
 
-        if(date1 > date2)
+        dateFinCopie = copie.rechercheLocale(d);
+
+        if(dateFin > dateFinCopie)
         {
-            date1 = date2;
-            d1 = d2;
-            b1 = b2;
+            dateFin = dateFinCopie;
+            *this = copie;
         }
     }
-    cout << "Date fin max = " << date1 << endl;
-    return date1;
+    cout << "Date fin max = " << dateFin << endl;
+    return dateFin;
 }
 
 /**

@@ -53,8 +53,6 @@ void testsFonctions()
 
     Bierwirth b(d.getN(), d.getM());
     cout << "-----> Date de fin au plus tot = " << b.evaluate(d) << endl;
-    cout << "DERNIERE ";
-    derniereOperation.affiche();
 
     cout << "==================================" << endl << "CHEMIN CRITIQUE" << endl;
     b.cheminCritique();
@@ -67,11 +65,27 @@ void testsFonctions()
     b.rechercheLocale(d);
 }
 
+
+void testsFonctions_2()
+{
+    Data d;
+    const int nbEssais = 500;
+
+    d.lireInstance("../INSTANCES/la01_2.dat");
+    Bierwirth b(d.getN(), d.getM());
+   // b.evaluate(d);
+   // b.cheminCritique();
+   // b.rechercheLocale(d);
+    b.getMeilleureDate(d, nbEssais);
+    b.afficherCheminCritique();
+   // b.cheminCritique();
+   // b.afficherCheminCritique();
+}
 int main(int, char **)
 {
     clock_t begin = clock();
 
-    lireFichiers();
+    testsFonctions_2();
 
     clock_t end = clock();
     cout << "--> " << double(end - begin) / CLOCKS_PER_SEC << endl;
