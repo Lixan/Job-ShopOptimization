@@ -1,6 +1,8 @@
 #ifndef OPERATION_H
 #define OPERATION_H
 
+#include <string>
+
 class Operation
 {
 public:
@@ -11,6 +13,7 @@ public:
     Operation();
     Operation(int numeroMachine, int numeroJob, int duree);
     void affiche() const;
+    std::string toString() const;
 
     int getNumeroMachine() const;
     int getNumeroJob() const;

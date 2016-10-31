@@ -4,6 +4,7 @@
 #include <vector>
 #include <list>
 #include "Data.h"
+#include <string>
 
 class Bierwirth
 {
@@ -25,9 +26,13 @@ public:
 
     void rechercheMorceauxInteressants(std::list<std::pair<Operation*, Operation*> > &pairs);
     int getPositionOperation(const Data &d, Operation *op) const;
+    bool isCritique(Operation *op);
 
+    std::string toStringCheminCritique() const;
     void afficherCheminCritique() const;
     void afficherVecteurBierwirth() const;
+
+    friend class GrapheWindow;
 };
 
 #endif // BIERWIRTH_H

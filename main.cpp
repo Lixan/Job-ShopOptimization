@@ -1,94 +1,13 @@
-#include <iostream>
-#include <fstream>
-#include <ctime>
-#include "Data.h"
-#include "Bierwirth.h"
-#include "Operation.h"
+#include <QApplication>
+#include "mainwindow.h"
+#include "graphewindow.h"
 
-using namespace std;
-
-/**
- * On lit tous les fichiers de tmp situés dans "../INSTANCES"
- * On recupère la meilleure date de fin pour chacun des fichiers
- * On écrit les résultats dans un fichier résultat
- * @brief lireFichiers
- */
-void lireFichiers()
+int main(int argc, char *argv[])
 {
-    string tmp[] = {"la01.dat","la02.dat","la03.dat","la04.dat","la05.dat","la06.dat","la07.dat",
-                                             "la08.dat","la09.dat","la10.dat","la11.dat","la12.dat","la13.dat","la14.dat",
-                                             "la15.dat","la16.dat","la17.dat","la18.dat","la19.dat","la20.dat"};
+    QApplication app(argc, argv);
 
-   // string tmp[] = {"la01.dat","la06.dat","la07.dat"};
+    MainWindow fenetre;
+    fenetre.show();
 
-    vector<string> listeFichiers(&tmp[0],&tmp[0]+20);
-    ofstream fichier("../resultats.txt");
-    Data d;
-    const int nbEssais = 1000;
-
-    if(fichier.is_open())
-    {
-        for(int i=0; i<listeFichiers.size(); ++i)
-        {
-            d.lireInstance("../INSTANCES/"+listeFichiers[i]);
-            Bierwirth b(d.getN(), d.getM());
-            fichier << listeFichiers[i] << '\t' << b.getMeilleureDate(d, nbEssais) << endl;
-        }
-        fichier.close();
-    }
-    else
-    {
-        cerr << "Impossible d'ouvrir le fichier" << endl;
-    }
-}
-
-void testsFonctions()
-{
-    Data d;
-    list<pair<Operation*, Operation*> > pairs;
-
-    d.lireInstance("../INSTANCES/la01.dat");
-    d.affiche();
-    cout << "==================================" << endl << "DATES DE FIN" << endl;
-
-    Bierwirth b(d.getN(), d.getM());
-    cout << "-----> Date de fin au plus tot = " << b.evaluate(d) << endl;
-
-    cout << "==================================" << endl << "CHEMIN CRITIQUE" << endl;
-    b.cheminCritique();
-    b.afficherCheminCritique();
-
-
-    cout << "==================" << endl << "Recherche morceaux interessants : " << endl;
-    b.rechercheMorceauxInteressants(pairs);
-
-    b.rechercheLocale(d);
-}
-
-
-void testsFonctions_2()
-{
-    Data d;
-    const int nbEssais = 500;
-
-    d.lireInstance("../INSTANCES/la01_2.dat");
-    Bierwirth b(d.getN(), d.getM());
-   // b.evaluate(d);
-   // b.cheminCritique();
-   // b.rechercheLocale(d);
-    b.getMeilleureDate(d, nbEssais);
-    b.afficherCheminCritique();
-   // b.cheminCritique();
-   // b.afficherCheminCritique();
-}
-int main(int, char **)
-{
-    clock_t begin = clock();
-
-    testsFonctions_2();
-
-    clock_t end = clock();
-    cout << "--> " << double(end - begin) / CLOCKS_PER_SEC << endl;
-
-    return 0;
+    return app.exec();
 }

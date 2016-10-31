@@ -305,6 +305,18 @@ int Bierwirth::getPositionOperation(const Data &d, Operation *op) const
 }
 
 /**
+ * Détermine si l'opération passée en paramètre fait partie du chemin critique
+ * @brief isCritique
+ * @param op
+ * @return
+ */
+bool Bierwirth::isCritique(Operation *op)
+{
+    return std::find(std::begin(listeCheminCritique), std::end(listeCheminCritique), op) != std::end(listeCheminCritique);
+}
+
+
+/**
  * Affichage du chemin critique
  * @brief Bierwirth::afficherCheminCritique
  */
@@ -317,6 +329,16 @@ void Bierwirth::afficherCheminCritique() const
     }
 }
 
+string Bierwirth::toStringCheminCritique() const
+{
+    string chaine("Chemin critique :\n");
+    for (list<Operation*>::const_iterator it = listeCheminCritique.begin(); it != listeCheminCritique.end(); ++it)
+    {
+        chaine += (*it)->toString();
+    }
+    chaine += "\n";
+    return chaine;
+}
 
 /**
  * Affichage du vecteur de bierwirth

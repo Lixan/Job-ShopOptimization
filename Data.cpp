@@ -88,3 +88,14 @@ int Data::getM() const
 {
     return m;
 }
+
+std::string Data::getName() const
+{
+    return name_;
+}
+
+void Data::setName(const std::string &name)
+{
+    name_ = name;
+}
+

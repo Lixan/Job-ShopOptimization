@@ -15,6 +15,19 @@ void Operation::affiche() const
     cout << "Operation : numero job = " << numeroJob << "| numero machine = " << numeroMachine << " | duree = " << duree << endl;
 }
 
+std::string Operation::toString() const
+{
+    std::string chaine;
+    chaine += "Operation : numero job = "
+           + std::to_string(numeroJob)
+           + " | numero machine = "
+           + std::to_string(numeroMachine)
+           + " | duree = "
+           + std::to_string(duree)
+           + "\n";
+    return chaine;
+}
+
 // ACCESSEURS ==============================================================================================================
 
 int Operation::getNumeroMachine() const
