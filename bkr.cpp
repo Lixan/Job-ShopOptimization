@@ -6,7 +6,7 @@
 #include <iostream>
 
 
-const std::string BKR::BKR_FILE = "../fichiers/BKR.txt";
+const std::string BKR::BKR_FILE = "../oad-zz2-tp2/fichiers/BKR.txt";
 
 
 BKR::BKR (const Data & d)
