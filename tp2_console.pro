@@ -7,7 +7,10 @@ SOURCES += main.cpp \
     graphedialog.cpp \
     bkr.cpp \
     graphewindow.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    heuristicmethod.cpp \
+    multistart.cpp \
+    geneticalalgorithm.cpp
 
 HEADERS += \
     Data.h \
@@ -16,4 +19,7 @@ HEADERS += \
     bkr.h \
     graphewindow.h \
     graphedialog.h \
-    mainwindow.h
+    mainwindow.h \
+    heuristicmethod.h \
+    multistart.h \
+    geneticalalgorithm.h

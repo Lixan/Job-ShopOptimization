@@ -11,10 +11,14 @@
 #include <QScrollArea>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QComboBox>
+
+#include "heuristicmethod.h"
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
 private:
     QWidget *mainWidget;
     QHBoxLayout *H_layout;
@@ -25,6 +29,9 @@ private:
     QScrollArea *scrollArea;
     QLabel *console;
 
+    QComboBox * comboBox;
+    QPushButton *btnOk;
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     int afficherGraphe(QString fichier);
@@ -34,6 +41,9 @@ signals:
 
 public slots:
     void openDialog();
+    void lancement();
 };
+
+Q_DECLARE_METATYPE(HeuristicMethod *)
 
 #endif // MAINWINDOW_H

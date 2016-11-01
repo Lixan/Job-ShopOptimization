@@ -232,38 +232,6 @@ int Bierwirth::rechercheLocale(Data &d)
 
 
 /**
- * On effectue une recherche locale nbEssais fois et on récupère la meilleure date de fin parmis toutes les recherches
- * @brief getMeilleureDate
- * @param d1 : opérations à traiter
- * @param nbEssais : nombre de recherches locales effectuées
- * @return : meilleure date de fin trouvée
- */
-int Bierwirth::getMeilleureDate(Data &d, int nbEssais)
-{
-    int dateFin,
-        dateFinCopie;
-    Bierwirth copie(d.getN(), d.getM());
-
-    dateFin = rechercheLocale(d);
-
-    for(int i=0;i<nbEssais; ++i)
-    {
-
-        copie.shuffle();
-
-        dateFinCopie = copie.rechercheLocale(d);
-
-        if(dateFin > dateFinCopie)
-        {
-            dateFin = dateFinCopie;
-            *this = copie;
-        }
-    }
-    cout << "Date fin max = " << dateFin << endl;
-    return dateFin;
-}
-
-/**
  * On cherche la position/index d'une opération dans le vecteur de bierwirth
  * @brief Bierwirth::getPositionOperation
  * @param d
@@ -303,6 +271,7 @@ int Bierwirth::getPositionOperation(const Data &d, Operation *op) const
 
     return position;
 }
+
 
 /**
  * Détermine si l'opération passée en paramètre fait partie du chemin critique

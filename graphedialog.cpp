@@ -4,7 +4,7 @@
 
 GrapheDialog::GrapheDialog(Data &d, Bierwirth &b, QDialog *parent) : QDialog(parent)
 {
-    int width = 1000,
+    int width = 800,
         height = 600;
     layout = new QVBoxLayout(this);
     graphe = new GrapheWindow(&d,&b,this);

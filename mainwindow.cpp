@@ -4,6 +4,7 @@
 #include <QPushButton>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QComboBox>
 #include <QString>
 #include <QPalette>
 #include "Data.h"
@@ -13,6 +14,8 @@
 #include "graphedialog.h"
 #include <iostream>
 #include <QFileInfo>
+#include "multistart.h"
+#include "geneticalalgorithm.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -25,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     nomFichier = new QLabel("aucun fichier sélectionné",this);
     scrollArea = new QScrollArea(this);
     console = new QLabel(this);
+    comboBox = new QComboBox(this);
+    btnOk = new QPushButton("Lancer",this);
 
     //Initialisations
     scrollArea->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOn );
@@ -42,12 +47,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     console->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
+    HeuristicMethod * x = new MultiStart();
+    HeuristicMethod * y = new GeneticalAlgorithm();
+    comboBox->addItem(QString("Multi-Start"), QVariant::fromValue(x));
+    comboBox->addItem(QString("Algorithme génétique"), QVariant::fromValue(y));
+
+
     //affectations
     scrollArea->setWidget(console);
     scrollArea->setWidgetResizable( true );
 
     H_layout->addWidget(btn);
     H_layout->addWidget(nomFichier);
+    H_layout->addWidget(comboBox);
+    H_layout->addWidget(btnOk);
 
     V_layout->addLayout(H_layout);
     V_layout->addWidget(scrollArea);
@@ -55,10 +68,23 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setCentralWidget(mainWidget);
 
     //Connexions
-    QObject::connect(btn,SIGNAL(clicked(bool)),this,SLOT(openDialog()));
+    QObject::connect(btn,SIGNAL(clicked(bool)),this,SLOT(openDialog()));   
+    QObject::connect(btnOk,SIGNAL(clicked(bool)),this,SLOT(lancement()));
 
     resize(800,500);
-    setWindowTitle("TP2 - Aide à la décision");
+    setWindowTitle("Résolution du problème de Job-Shop");
+}
+
+void MainWindow::lancement()
+{
+    if(fileExists(nomFichier->text()))
+    {
+        afficherGraphe(nomFichier->text());
+    }
+    else
+    {
+        console->setText("Sélectionnez un fichier pour démarrer la résolution.");
+    }
 }
 
 void MainWindow::openDialog()
@@ -66,10 +92,6 @@ void MainWindow::openDialog()
     QString fichier = QFileDialog::getOpenFileName(this, "Ouvrir un fichier", QString(), "*.dat");
     nomFichier->setText(fichier);
 
-    if(fileExists(fichier))
-    {
-        afficherGraphe(fichier);
-    }
 }
 
 int MainWindow::afficherGraphe(QString fichier)
@@ -83,16 +105,18 @@ int MainWindow::afficherGraphe(QString fichier)
     QString temp = console->text();
     int dateFin = 0;
 
-    dateFin = b.getMeilleureDate(d, 1000);
+    QVariant variant = comboBox->currentData();
+    HeuristicMethod *heuristic = variant.value<HeuristicMethod *>();
+    dateFin = heuristic->genererMeilleurDate(d, 1000, &b);
+
     b.cheminCritique();
 
     BKR bkr(d);
 
-    temp.append("\n\n===============================================\n");
     temp.append("Date de fin = " + QString::number(dateFin) + "\n");
-    temp.append("\n\n===============================================\n\n");
+    temp.append("\n\n");
     temp.append(QString::fromStdString(b.toStringCheminCritique()));
-    temp.append("\n\n===============================================\n\n");
+    temp.append("\n\n");
     temp.append("Solution approchée à " + QString::number(100 *((float)bkr.makespan_/dateFin)) +"% de la meilleure solution : "+ QString::number(bkr.makespan_) +".\n");
     temp.append("\n\n===============================================\n\n");
     console->setText(temp);

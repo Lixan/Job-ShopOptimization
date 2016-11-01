@@ -17,6 +17,7 @@ class Bierwirth
 
 public:
     Bierwirth(int n, int m);
+
     void shuffle();
 
     int evaluate(Data &d);
