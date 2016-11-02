@@ -4,7 +4,6 @@ SOURCES += main.cpp \
     Data.cpp \
     Operation.cpp \
     Bierwirth.cpp \
-    graphedialog.cpp \
     bkr.cpp \
     graphewindow.cpp \
     mainwindow.cpp \
@@ -18,7 +17,6 @@ HEADERS += \
     Bierwirth.h \
     bkr.h \
     graphewindow.h \
-    graphedialog.h \
     mainwindow.h \
     heuristicmethod.h \
     multistart.h \

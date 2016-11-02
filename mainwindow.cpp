@@ -1,39 +1,40 @@
 #include "mainwindow.h"
-#include <QRectF>
-#include <QPainter>
 #include <QPushButton>
 #include <QFileDialog>
-#include <QMessageBox>
 #include <QComboBox>
 #include <QString>
 #include <QPalette>
-#include "Data.h"
-#include "Bierwirth.h"
-#include "bkr.h"
-#include "graphewindow.h"
-#include "graphedialog.h"
 #include <iostream>
 #include <QFileInfo>
+
 #include "multistart.h"
 #include "geneticalalgorithm.h"
+#include "graphewindow.h"
+#include "bkr.h"
+#include "Data.h"
+#include "Bierwirth.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     //Créations
     mainWidget = new QWidget(this);
-    H_layout = new QHBoxLayout;
+    H_layout_top = new QHBoxLayout;
+    H_layout_bottom = new QHBoxLayout;
     V_layout = new QVBoxLayout;
 
     btn = new QPushButton("Sélectionner fichier...",this);
     nomFichier = new QLabel("aucun fichier sélectionné",this);
-    scrollArea = new QScrollArea(this);
+    scrollAreaConsole = new QScrollArea(this);
+    scrollAreaGraphe = new QScrollArea(this);
     console = new QLabel(this);
     comboBox = new QComboBox(this);
     btnOk = new QPushButton("Lancer",this);
 
     //Initialisations
-    scrollArea->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOn );
-    scrollArea->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOn );
+    scrollAreaConsole->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOn );
+    scrollAreaConsole->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOn );
+    scrollAreaGraphe->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOn );
+    scrollAreaGraphe->setHorizontalScrollBarPolicy ( Qt::ScrollBarAlwaysOn );
 
     btn->setFixedHeight(50);
     btn->setMaximumWidth(300);
@@ -42,8 +43,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     //changement background color de console
     QPalette Pal(palette());
     Pal.setColor(QPalette::Background, Qt::white);
-    scrollArea->setAutoFillBackground(true);
-    scrollArea->setPalette(Pal);
+    scrollAreaConsole->setAutoFillBackground(true);
+    scrollAreaConsole->setPalette(Pal);
 
     console->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
@@ -54,16 +55,19 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 
     //affectations
-    scrollArea->setWidget(console);
-    scrollArea->setWidgetResizable( true );
+    scrollAreaConsole->setWidget(console);
+    scrollAreaConsole->setWidgetResizable( true );
 
-    H_layout->addWidget(btn);
-    H_layout->addWidget(nomFichier);
-    H_layout->addWidget(comboBox);
-    H_layout->addWidget(btnOk);
+    H_layout_top->addWidget(btn);
+    H_layout_top->addWidget(nomFichier);
+    H_layout_top->addWidget(comboBox);
+    H_layout_top->addWidget(btnOk);
 
-    V_layout->addLayout(H_layout);
-    V_layout->addWidget(scrollArea);
+    H_layout_bottom->addWidget(scrollAreaConsole);
+    H_layout_bottom->addWidget(scrollAreaGraphe);
+
+    V_layout->addLayout(H_layout_top);
+    V_layout->addLayout(H_layout_bottom);
     mainWidget->setLayout(V_layout);
     setCentralWidget(mainWidget);
 
@@ -75,6 +79,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setWindowTitle("Résolution du problème de Job-Shop");
 }
 
+/**
+ * Lancement du traitement du fichier sélectionné
+ * @brief MainWindow::lancement
+ */
 void MainWindow::lancement()
 {
     if(fileExists(nomFichier->text()))
@@ -87,6 +95,10 @@ void MainWindow::lancement()
     }
 }
 
+/**
+ * Ouvre une fenêtre de dialogue pour la sélection du fichier du données
+ * @brief MainWindow::openDialog
+ */
 void MainWindow::openDialog()
 {
     QString fichier = QFileDialog::getOpenFileName(this, "Ouvrir un fichier", QString(), "*.dat");
@@ -94,37 +106,56 @@ void MainWindow::openDialog()
 
 }
 
-int MainWindow::afficherGraphe(QString fichier)
+/**
+ * Crée Data + Bierwirth, effectue les opérations sur le vecteur de bierwirth
+ * et affiche les résultats dans la console + le graphe
+ * @brief MainWindow::afficherGraphe
+ * @param fichier : fichier contenant les données du job-shop
+ */
+void MainWindow::afficherGraphe(QString fichier)
 {
-    Data d;
+    //Création de Data et lecture du fichier
+    d = new Data;
+    d->setName(fichier.toStdString());
+    d->lireInstance(fichier.toStdString());
 
-    d.setName(fichier.toStdString());
-
-    d.lireInstance(fichier.toStdString());
-    Bierwirth b(d.getN(), d.getM());    
+    //Création du vecteur de Bierwirth
+    b = new Bierwirth(d->getN(), d->getM());
     QString temp = console->text();
     int dateFin = 0;
 
+    //Choix de la méthode d'évaluation
     QVariant variant = comboBox->currentData();
     HeuristicMethod *heuristic = variant.value<HeuristicMethod *>();
-    dateFin = heuristic->genererMeilleurDate(d, 1000, &b);
 
-    b.cheminCritique();
+    //Génération des données
+    dateFin = heuristic->genererMeilleurDate(*d, 1000, b);
+    b->cheminCritique();
 
-    BKR bkr(d);
+    BKR bkr(*d);
 
+    //Affichage dans la console
     temp.append("Date de fin = " + QString::number(dateFin) + "\n");
     temp.append("\n\n");
-    temp.append(QString::fromStdString(b.toStringCheminCritique()));
+    temp.append(QString::fromStdString(b->toStringCheminCritique()));
     temp.append("\n\n");
     temp.append("Solution approchée à " + QString::number(100 *((float)bkr.makespan_/dateFin)) +"% de la meilleure solution : "+ QString::number(bkr.makespan_) +".\n");
     temp.append("\n\n===============================================\n\n");
     console->setText(temp);
 
-    GrapheDialog gd(d,b);
-    return gd.exec();
+    //Affichage du graphe
+    graphe = new GrapheWindow(d,b,this);
+    graphe->resize(5000,5000);
+    graphe->show();
+    scrollAreaGraphe->setWidget(graphe);
 }
 
+/**
+ * Retourne true si le fichier de chemin path existe
+ * @brief MainWindow::fileExists
+ * @param path
+ * @return
+ */
 bool MainWindow::fileExists(QString path) {
     QFileInfo check_file(path);
     // check if file exists and if yes: Is it really a file and no directory?

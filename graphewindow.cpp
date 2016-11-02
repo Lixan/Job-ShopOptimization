@@ -1,7 +1,7 @@
 #include "graphewindow.h"
 #include <QPaintEvent>
 #include <QPainter>
-#include <QRect>
+#include <QRectF>
 #include <QLabel>
 #include <QLineF>
 
@@ -13,8 +13,8 @@ GrapheWindow::GrapheWindow(Data *d, Bierwirth *b, QWidget *parent) : data(d), bi
 
 void GrapheWindow::paintEvent(QPaintEvent *event)
 {
-    int width = 80,
-        height = 80,
+    int width = 60,
+        height = 60,
         rayon = width/2,
         x = rayon,
         y = rayon;
@@ -23,7 +23,7 @@ void GrapheWindow::paintEvent(QPaintEvent *event)
     QRectF *cercle,
            *duree;
     QLineF *line;
-    painter.setBackground(Qt::yellow);
+
     for(int i=0; i<data->n; ++i)
     {
         x = rayon;
@@ -32,9 +32,6 @@ void GrapheWindow::paintEvent(QPaintEvent *event)
             cercle = new QRectF(x, y, width, height);
             duree = new QRectF(x + (width+rayon)/2, y-10, width, height);
             line = new QLineF(x+width, y+rayon, x+width+rayon,y+rayon);
-
-            //painter.setBrush( Qt::cyan );
-            //painter.setPen( Qt::red );
 
             painter.setBrush(Qt::white);
             painter.setPen( Qt::black );
@@ -61,16 +58,6 @@ void GrapheWindow::paintEvent(QPaintEvent *event)
         }
         y += height + rayon;
     }
-}
-
-void GrapheWindow::draw(QRect &rect)
-{
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(Qt::black);
-    painter.drawText(rect, Qt::AlignCenter,
-                      "Data");
-    painter.drawRect(rect);
 }
 
 

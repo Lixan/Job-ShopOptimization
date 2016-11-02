@@ -6,14 +6,17 @@
 
 #include <QWidget>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QPushButton>
 #include <QLabel>
 #include <QScrollArea>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QComboBox>
 
 #include "heuristicmethod.h"
+#include "graphewindow.h"
+
+#include "Bierwirth.h"
+#include "Data.h"
 
 class MainWindow : public QMainWindow
 {
@@ -21,20 +24,25 @@ class MainWindow : public QMainWindow
 
 private:
     QWidget *mainWidget;
-    QHBoxLayout *H_layout;
+    QHBoxLayout *H_layout_top;
+    QHBoxLayout *H_layout_bottom;
     QVBoxLayout *V_layout;
 
     QPushButton *btn;
     QLabel *nomFichier;
-    QScrollArea *scrollArea;
+    QScrollArea *scrollAreaConsole;
     QLabel *console;
+    QScrollArea *scrollAreaGraphe;
+    GrapheWindow *graphe;
 
     QComboBox * comboBox;
     QPushButton *btnOk;
 
+    Bierwirth *b;
+    Data *d;
 public:
     explicit MainWindow(QWidget *parent = 0);
-    int afficherGraphe(QString fichier);
+    void afficherGraphe(QString fichier);
     bool fileExists(QString path);
 
 signals:
