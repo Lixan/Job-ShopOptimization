@@ -1,22 +1,25 @@
-#include "geneticalalgorithm.h"
+#include "vns.h"
 
-GeneticalAlgorithm::GeneticalAlgorithm()
+VNS::VNS()
 {
 
 }
 
-int GeneticalAlgorithm::genererMeilleurDate(Data &d, int nbEssais, Bierwirth *best)
+int VNS::genererMeilleurDate(Data &d, int nbEssais, Bierwirth *best)
 {
     int dateFin,
-        dateFinCopie;
+        dateFinCopie,
+        k = 0,
+        kMax = (d.getN()*d.getM())-1;
+
     Bierwirth copie(d.getN(), d.getM());
 
     dateFin = best->rechercheLocale(d);
 
-    for(int i=0;i<nbEssais; ++i)
+    while(k != kMax)
     {
 
-        copie.shuffle();
+        copie.shuffle(k);
 
         dateFinCopie = copie.rechercheLocale(d);
 
@@ -24,6 +27,11 @@ int GeneticalAlgorithm::genererMeilleurDate(Data &d, int nbEssais, Bierwirth *be
         {
             dateFin = dateFinCopie;
             *best = copie;
+            k = 1;
+        }
+        else
+        {
+            ++k;
         }
     }
     return dateFin;

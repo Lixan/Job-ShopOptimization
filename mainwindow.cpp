@@ -8,7 +8,7 @@
 #include <QFileInfo>
 
 #include "multistart.h"
-#include "geneticalalgorithm.h"
+#include "vns.h"
 #include "graphewindow.h"
 #include "bkr.h"
 #include "Data.h"
@@ -49,9 +49,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     console->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
     HeuristicMethod * x = new MultiStart();
-    HeuristicMethod * y = new GeneticalAlgorithm();
+    HeuristicMethod * y = new VNS();
     comboBox->addItem(QString("Multi-Start"), QVariant::fromValue(x));
-    comboBox->addItem(QString("Algorithme génétique"), QVariant::fromValue(y));
+    comboBox->addItem(QString("VNS"), QVariant::fromValue(y));
 
 
     //affectations

@@ -19,6 +19,7 @@ public:
     Bierwirth(int n, int m);
 
     void shuffle();
+    void shuffle(int k);
 
     int evaluate(Data &d);
     void cheminCritique();

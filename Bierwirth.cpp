@@ -40,6 +40,11 @@ void Bierwirth::shuffle()
     random_shuffle(bierwirth_vector.begin(), bierwirth_vector.end());
 }
 
+void Bierwirth::shuffle(int k)
+{
+    random_shuffle(bierwirth_vector.begin(), bierwirth_vector.begin()+k);
+}
+
 /**
  * Evaluation du vecteur de bierwirth
  * @brief Bierwirth::evaluate

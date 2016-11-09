@@ -9,7 +9,7 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     heuristicmethod.cpp \
     multistart.cpp \
-    geneticalalgorithm.cpp
+    vns.cpp
 
 HEADERS += \
     Data.h \
@@ -20,4 +20,4 @@ HEADERS += \
     mainwindow.h \
     heuristicmethod.h \
     multistart.h \
-    geneticalalgorithm.h
+    vns.h
