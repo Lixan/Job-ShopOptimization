@@ -6,6 +6,9 @@
 #include "Data.h"
 #include <string>
 
+/*!
+ * \brief Gestion du vecteur de Bierwirth et du makespan.
+ */
 class Bierwirth
 {
     int n, //nb jobs
@@ -31,8 +34,7 @@ public:
     bool isCritique(Operation *op);
 
     std::string toStringCheminCritique() const;
-    void afficherCheminCritique() const;
-    void afficherVecteurBierwirth() const;
+    std::string afficherVecteurBierwirth() const;
 
     friend class GrapheWindow;
 };

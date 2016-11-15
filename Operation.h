@@ -3,6 +3,9 @@
 
 #include <string>
 
+/**
+ * @brief Gestion des opérations, une machine sur un job.
+ */
 class Operation
 {
 public:
@@ -12,7 +15,7 @@ public:
 public:
     Operation();
     Operation(int numeroMachine, int numeroJob, int duree);
-    void affiche() const;
+
     std::string toString() const;
 
     int getNumeroMachine() const;

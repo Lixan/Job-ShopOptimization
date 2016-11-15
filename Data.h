@@ -5,6 +5,9 @@
 #include <vector>
 #include <string>
 
+/*!
+ * \brief Gestion de l'instance.
+ */
 class Data
 {
     int n,  //nombre de jobs

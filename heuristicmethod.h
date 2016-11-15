@@ -4,6 +4,9 @@
 #include "Data.h"
 #include "Bierwirth.h"
 
+/**
+ * @brief Gestion des différentes méthodes heuristiques pour résoudre le problème.
+ */
 class HeuristicMethod
 {
 public:

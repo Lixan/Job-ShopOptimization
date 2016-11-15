@@ -10,9 +10,8 @@ using namespace std;
 Data::Data() { }
 
 /**
- * On lit un fichier de données et on y récupère ses opérations
- * @brief Data::lireInstance
- * @param filename
+ * @brief Lecture d'un fichier de données et récupèration des opérations.
+ * @param filename fichier de l'instance
  */
 void Data::lireInstance(string filename)
 {
@@ -40,8 +39,7 @@ void Data::lireInstance(string filename)
 }
 
 /**
- * Affichage de toutes les opérations
- * @brief Data::affiche
+ * @brief Affichage de toutes les opérations.
  */
 void Data::affiche()
 {
@@ -57,8 +55,7 @@ void Data::affiche()
 }
 
 /**
- * Affichage des pères des opérations
- * @brief Data::affichePeres
+ * @brief Affichage des pères des opérations.
  */
 void Data::affichePeres()
 {
@@ -79,21 +76,37 @@ void Data::affichePeres()
     }
 }
 
+/**
+ * @brief Getter du nombre de jobs.
+ * @return nombre de jobs
+ */
 int Data::getN() const
 {
     return n;
 }
 
+/**
+ * @brief Getter du nombre de machines par jobs.
+ * @return nombre de machines
+ */
 int Data::getM() const
 {
     return m;
 }
 
+/**
+ * @brief Getter du nom de l'instance
+ * @return nom de l'instance
+ */
 std::string Data::getName() const
 {
     return name_;
 }
 
+/**
+ * @brief Setter du nom de l'instance
+ * @param name nom de l'instance
+ */
 void Data::setName(const std::string &name)
 {
     name_ = name;

@@ -1,6 +1,7 @@
 #include <iostream>
+#include <sstream>
 #include <vector>
-#include <algorithm>    // random_shuffle
+#include <algorithm>
 #include <list>
 #include "Data.h"
 #include "Bierwirth.h"
@@ -12,21 +13,14 @@ Bierwirth::Bierwirth(int n, int m) : n(n), m(m)
 {
     bierwirth_vector.reserve(n*m);
     shuffle();
-
-    //---- LIGNES A SUPPRIMER ---- Test avec le vecteur de bierwirth du cours
-    //bierwirth_vector = {0,1,2,0,1,1,2,2,0};
-    //bierwirth_vector = {0,1,1,1,0,2,0,2,2};
-    //bierwirth_vector = {0,5,2,3,4,7,3,7,5,9,6,7,3,0,9,9,5,3,6,8,1,4,1,2,2,8,5,1,9,8,6,7,2,7,0,3,5,8,1,4,1,4,4,6,0,2,6,0,9,8};
-    //---- LIGNES A SUPPRIMER ----
 }
 
-/**
- * Mélange du vecteur de bierwirth
- * @brief Bierwirth::shuffle
+/*!
+ * \brief Mélange du vecteur de bierwirth.
  */
 void Bierwirth::shuffle()
 {
-    int index = 0;
+    int     index = 0;
     bierwirth_vector.clear();
 
     for(int i=0; i<n; ++i)
@@ -40,32 +34,35 @@ void Bierwirth::shuffle()
     random_shuffle(bierwirth_vector.begin(), bierwirth_vector.end());
 }
 
+/*!
+ * \brief Mélange du vecteur de bierwirth de k valeurs.
+ * \param k nombre de valeurs à mélanger dans le vecteur de bierwirth
+ */
 void Bierwirth::shuffle(int k)
 {
     random_shuffle(bierwirth_vector.begin(), bierwirth_vector.begin()+k);
 }
 
-/**
- * Evaluation du vecteur de bierwirth
- * @brief Bierwirth::evaluate
- * @param d
- * @return
+/*!
+ * \brief Evaluation du vecteur de bierwirth.
+ * \param d instance
+ * \return makespan
  */
 int Bierwirth::evaluate(Data &d)
 {
-    vector<int> occurences;
-    vector<Operation*> dernieresMachines; //vecteurs contenant toutes les opérations traitées dans l'ordre
+    vector<int>         occurences;
+    vector<Operation*>  dernieresMachines;      //vecteurs contenant toutes les opérations traitées dans l'ordre
 
-    vector<int> dateFinJob; //On a pour chaque job sa dernière date d'utilisation par une machine
-    vector<int> dateFinOperationMachine; //On a pour chaque machine sa dernière date d'utilisation pour un job
+    vector<int>         dateFinJob;             //On a pour chaque job sa dernière date d'utilisation par une machine
+    vector<int>         dateFinOperationMachine;//On a pour chaque machine sa dernière date d'utilisation pour un job
 
-    int i,
-        bierwirthSize = n*m,
-        idJob, // = ligne = id du job courant traité
-        idMachine, //id de la machine courante traitée
-        dureeOperation, //valeur de la durée courante traitée
-        dateFinMax = 0,
-        dateFinAuPlusTot = 0;
+    int                 i,
+                        bierwirthSize = n*m,
+                        idJob,                  // = ligne = id du job courant traité
+                        idMachine,              //id de la machine courante traitée
+                        dureeOperation,         //valeur de la durée courante traitée
+                        dateFinMax = 0,         //date fin maximum entre entre la date de fin d'un job et la date de fin d'une machine
+                        dateFinAuPlusTot = 0;   //makespan
 
     //Initialisation du tableau d'occurences et dates de fin des jobs
     occurences.resize(n);
@@ -135,13 +132,12 @@ int Bierwirth::evaluate(Data &d)
     return dateFinAuPlusTot;
 }
 
-/**
- * Calcul du chemin critique
- * @brief Bierwirth::cheminCritique
+/*!
+ * \brief Calcul du chemin critique.
  */
 void Bierwirth::cheminCritique()
 {
-    Operation *derniereOperation = lastOp;
+    Operation   *derniereOperation = lastOp;
     listeCheminCritique.clear();
 
     while(derniereOperation != 0)
@@ -152,15 +148,14 @@ void Bierwirth::cheminCritique()
 }
 
 
-/**
- * Recherche des morceaux/paires intéressants du chemin critique
- * @brief Bierwirth::rechercheMorceauxInteressants
- * @param pairs : paires d'opérations consécutives qui ne sont sur la même ligne (idJob différents)
+/*!
+ * \brief Recherche des morceaux/paires intéressants du chemin critique.
+ * \param pairs paires d'opérations consécutives qui ne sont pas sur le même job
  */
 void Bierwirth::rechercheMorceauxInteressants(list<pair<Operation*, Operation*> > &pairs)
 {
-    Operation *prec = listeCheminCritique.front();
-    list<Operation*>::iterator it = ++listeCheminCritique.begin();
+    Operation                   *prec = listeCheminCritique.front();
+    list<Operation*>::iterator  it = ++listeCheminCritique.begin();
 
     pairs.clear();
 
@@ -175,12 +170,11 @@ void Bierwirth::rechercheMorceauxInteressants(list<pair<Operation*, Operation*> 
 }
 
 
-/**
- * Recherche locale : on cherche à améliorer la date de fin de la chaîne, on modifie donc le vecteur de bierwirth
- * en fonction des morceaux intéressants jusqu'à ce qu'il n'y ait plus d'amélioration du temps
- * @brief Bierwirth::rechercheLocale
- * @param d
- * @return
+/*!
+ * \brief Recherche d'un meilleur makespan.
+ * \par   Modification du chemin critique grâce au pairs de morceaux intéressants jusqu'à ce qu'il n'y ait plus d'amélioration du temps.
+ * \param d instance
+ * \return makespan
  */
 int Bierwirth::rechercheLocale(Data &d)
 {
@@ -231,26 +225,24 @@ int Bierwirth::rechercheLocale(Data &d)
     evaluate(d);    // on réévalue le vecteur "d" afin de remttre les bons pointeurs sur les pères des opérations
     cheminCritique();
 
-    //cout << "===> FIN : " << dateFinPlusTot << endl;
     return dateFinPlusTot;
 }
 
 
-/**
- * On cherche la position/index d'une opération dans le vecteur de bierwirth
- * @brief Bierwirth::getPositionOperation
- * @param d
- * @param op : opération recherchée
- * @return : position/index dans le vecteur
+/*!
+ * \brief Recherche de la position/index d'une opération dans le vecteur de bierwirth
+ * \param d instance
+ * \param op opération recherchée
+ * \return position/index dans le vecteur
  */
 int Bierwirth::getPositionOperation(const Data &d, Operation *op) const
 {
     vector<int> occurences;
-    int i,
-        bierwirthSize = n*m,
-        idJob,
-        position = -1;
-    bool fin = false;
+    int         i,
+                bierwirthSize = n*m,
+                idJob,
+                position = -1;
+    bool        fin = false;
 
     //Initialisation du tableau d'occurences
     occurences.resize(n);
@@ -278,31 +270,20 @@ int Bierwirth::getPositionOperation(const Data &d, Operation *op) const
 }
 
 
-/**
- * Détermine si l'opération passée en paramètre fait partie du chemin critique
- * @brief isCritique
- * @param op
- * @return
+/*!
+ * \brief Détermine si l'opération passée en paramètre fait partie du chemin critique.
+ * \param op opération
+ * \return true si dans le chemin critique, false sinon
  */
 bool Bierwirth::isCritique(Operation *op)
 {
     return std::find(std::begin(listeCheminCritique), std::end(listeCheminCritique), op) != std::end(listeCheminCritique);
 }
 
-
-/**
- * Affichage du chemin critique
- * @brief Bierwirth::afficherCheminCritique
+/*!
+ * \brief Affichage du chemin critique
+ * \return
  */
-void Bierwirth::afficherCheminCritique() const
-{
-    cout << "Chemin critique : " << endl;
-    for (list<Operation*>::const_iterator it = listeCheminCritique.begin(); it != listeCheminCritique.end(); ++it)
-    {
-        (*it)->affiche();
-    }
-}
-
 string Bierwirth::toStringCheminCritique() const
 {
     string chaine("Chemin critique :\n");
@@ -315,16 +296,17 @@ string Bierwirth::toStringCheminCritique() const
 }
 
 /**
- * Affichage du vecteur de bierwirth
- * @brief Bierwirth::afficherVecteurBierwirth
+ * \brief Affichage du vecteur de bierwirth.
  */
-void Bierwirth::afficherVecteurBierwirth() const
+string Bierwirth::afficherVecteurBierwirth() const
 {
-    cout << "Bierwirth : {";
+    std::ostringstream oss;
+    oss << "Bierwirth : {";
     for(int j=0; j<bierwirth_vector.size(); ++j)
     {
-        cout << bierwirth_vector[j] << ", ";
+        oss << bierwirth_vector[j] << ", ";
     }
-    cout << "}" << endl;
+    oss << "}" << endl;
+    return oss.str();
 }
 

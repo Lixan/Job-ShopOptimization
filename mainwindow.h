@@ -18,28 +18,32 @@
 #include "Bierwirth.h"
 #include "Data.h"
 
+/**
+ * @brief Gestion de la fenêtre principale.
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 private:
-    QWidget *mainWidget;
-    QHBoxLayout *H_layout_top;
-    QHBoxLayout *H_layout_bottom;
-    QVBoxLayout *V_layout;
+    QWidget         *mainWidget;
+    QHBoxLayout     *H_layout_top;
+    QHBoxLayout     *H_layout_bottom;
+    QVBoxLayout     *V_layout;
 
-    QPushButton *btn;
-    QLabel *nomFichier;
-    QScrollArea *scrollAreaConsole;
-    QLabel *console;
-    QScrollArea *scrollAreaGraphe;
-    GrapheWindow *graphe;
+    QPushButton     *btn;
+    QLabel          *nomFichier;
+    QScrollArea     *scrollAreaConsole;
+    QLabel          *console;
+    QScrollArea     *scrollAreaGraphe;
+    GrapheWindow    *graphe;
 
-    QComboBox * comboBox;
-    QPushButton *btnOk;
+    QComboBox       * comboBox;
+    QPushButton     *btnOk;
 
-    Bierwirth *b;
-    Data *d;
+    Bierwirth       *b;
+    Data            *d;
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     void afficherGraphe(QString fichier);

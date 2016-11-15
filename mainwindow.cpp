@@ -48,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     console->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
+    //initialisation de la combobox de méthodes heuristiques
     HeuristicMethod * x = new MultiStart();
     HeuristicMethod * y = new VNS();
     comboBox->addItem(QString("Multi-Start"), QVariant::fromValue(x));
@@ -80,8 +81,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 }
 
 /**
- * Lancement du traitement du fichier sélectionné
- * @brief MainWindow::lancement
+ * @brief Lancement du traitement du fichier sélectionné.
  */
 void MainWindow::lancement()
 {
@@ -96,8 +96,7 @@ void MainWindow::lancement()
 }
 
 /**
- * Ouvre une fenêtre de dialogue pour la sélection du fichier du données
- * @brief MainWindow::openDialog
+ * @brief Ouvre une fenêtre de dialogue pour la sélection du fichier du données.
  */
 void MainWindow::openDialog()
 {
@@ -107,10 +106,9 @@ void MainWindow::openDialog()
 }
 
 /**
- * Crée Data + Bierwirth, effectue les opérations sur le vecteur de bierwirth
- * et affiche les résultats dans la console + le graphe
- * @brief MainWindow::afficherGraphe
- * @param fichier : fichier contenant les données du job-shop
+ * @brief Création de Data et Bierwirth, traitement des opérations sur le vecteur de bierwirth
+ * et affichage des résultats dans la console et le graphe.
+ * @param fichier fichier contenant les données du job-shop
  */
 void MainWindow::afficherGraphe(QString fichier)
 {
@@ -151,10 +149,9 @@ void MainWindow::afficherGraphe(QString fichier)
 }
 
 /**
- * Retourne true si le fichier de chemin path existe
- * @brief MainWindow::fileExists
- * @param path
- * @return
+ * @brief Vérification de l'existence du fichier.
+ * @param path chemin qui mène au fichier d'instance
+ * @return true si le fichier de chemin path existe.
  */
 bool MainWindow::fileExists(QString path) {
     QFileInfo check_file(path);

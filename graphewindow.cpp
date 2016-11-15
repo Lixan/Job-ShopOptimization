@@ -11,6 +11,10 @@ GrapheWindow::GrapheWindow(Data *d, Bierwirth *b, QWidget *parent) : data(d), bi
 
 }
 
+/**
+ * @brief Création du graphe.
+ * @param event
+ */
 void GrapheWindow::paintEvent(QPaintEvent *event)
 {
     int width = 60,

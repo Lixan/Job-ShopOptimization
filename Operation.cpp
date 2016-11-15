@@ -6,23 +6,18 @@ using namespace std;
 Operation::Operation() : numeroMachine(0), numeroJob(0), duree(0), pere(0) {}
 Operation::Operation(int numeroMachine, int numeroJob, int duree) : numeroMachine(numeroMachine), numeroJob(numeroJob), duree(duree), pere(0) {}
 
-/**
- * Affichage de l'opération
- * @brief Operation::affiche
- */
-void Operation::affiche() const
-{
-    cout << "Operation : numero job = " << numeroJob << "| numero machine = " << numeroMachine << " | duree = " << duree << endl;
-}
 
+/**
+ * @brief Affichage de l'opération.
+ */
 std::string Operation::toString() const
 {
     std::string chaine;
-    chaine += "Operation : numero job = "
+    chaine += "Op : numero job = "
            + std::to_string(numeroJob)
-           + " | numero machine = "
+           + " \t| numero machine = "
            + std::to_string(numeroMachine)
-           + " | duree = "
+           + "   \t| duree = "
            + std::to_string(duree)
            + "\n";
     return chaine;

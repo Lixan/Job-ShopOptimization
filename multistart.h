@@ -3,6 +3,9 @@
 
 #include "heuristicmethod.h"
 
+/**
+ * @brief Gestion de la méthode heuristique Multi-Start.
+ */
 class MultiStart : public HeuristicMethod
 {
 public:

@@ -6,7 +6,13 @@ MultiStart::MultiStart()
 
 }
 
-
+/**
+ * @brief Méthode heuristique donnant un makespan rapproché de l'optimal.
+ * @param d instance
+ * @param nbEssais nombre d'itération à effectuer dans l'algorithme
+ * @param best le meilleur makespan
+ * @return le meilleur makespan
+ */
 int MultiStart::genererMeilleurDate(Data &d, int nbEssais, Bierwirth *best)
 {
     int dateFin,

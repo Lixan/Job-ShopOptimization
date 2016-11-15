@@ -3,6 +3,9 @@
 
 #include "heuristicmethod.h"
 
+/**
+ * @brief Gestion de la méthode heuristique VNS
+ */
 class VNS : public HeuristicMethod
 {
 public:

@@ -6,6 +6,9 @@
 #include "Bierwirth.h"
 #include "Data.h"
 
+/**
+ * @brief Gestion de la fenêtre graphique du job-shop.
+ */
 class GrapheWindow : public QWidget
 {
     Q_OBJECT
